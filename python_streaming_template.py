@@ -25,21 +25,19 @@ class Transform:
 if __name__ == '__main__':
     tf = Transform()
     for line in sys.stdin:
-        try:
-            stripped_line = tf.stripLine(line)
-            #provide input columns
-            campaign_id,strategy_id,uuid,vt_period,imp,pf,num_click = stripped_line.split('\t')
-            #transform colomns into list of dicts
+        stripped_line = tf.stripLine(line)
+        #provide input columns
+        campaign_id,strategy_id,uuid,vt_period,imp,pf,num_click = stripped_line.split('\t')
+        #transform complex colomns into list of dicts
+        imp_list = tf.buildListOfDict(imp)
+        pf_list = tf.buildListOfDict(pf)
 
-            num_imp, events = tf.prepare_inputs(imp, pf)
+        #main calculation codes go here
 
-            num_conv, updated_events = attribution(events, int(vt_period))
-            touchpoints = build_touchpoints(updated_events)
-            category = find_category(touchpoints, num_conv)
-            output_cols = [campaign_id, strategy_id, uuid, str(num_imp), num_click, str(num_conv), category]
-            print '\t'.join(outputCols)
-        except Exception,err:
-            continue
+        #outputs go here - must be string
+        output = [campaign_id, strategy_id, uuid, str(num_imp), num_click, str(num_conv), category]
+        print '\t'.join(output)
+
 
 
 
